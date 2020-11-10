@@ -43,4 +43,32 @@ class AdminController extends Controller
         $request->session()->forget('admin');
         return redirect('login');
     }
+
+    public function checkLoginApi(Request $request){
+        try{
+            $email = $request->input('email');
+            $mdp = $request->input('mdp');
+            $data = array (
+                'email' => $email,
+                'mdp' => $mdp
+            );
+            $adm = new Admin();
+            $res['admin'] = $adm->checkLogin($data);
+
+            return response()->json([
+                'message' => 'Login ok !' ,
+                'admin' => $res['admin'],
+                'erreur' => ''
+            ], 200);
+      
+        }
+        catch(Exception $ex){
+            $res['erreur'] = $ex->getMessage();
+            
+            return response()->json([
+                'message' => 'Login failed',
+                'erreur' => $res['erreur']
+            ], 400);
+        }   
+    }
 }
