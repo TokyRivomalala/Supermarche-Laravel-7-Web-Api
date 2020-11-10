@@ -17,6 +17,11 @@ class ArticleController extends Controller
     public function insert(Request $request){
         try{
 
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
+
             $code = $request->input('code');
             $designation = $request->input('designation');
             $pu = $request->input('pu');
@@ -47,6 +52,11 @@ class ArticleController extends Controller
     public function delete($id){
         try{
 
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
+
             $art = new Article();
             $res['article'] = $art->deleteComplet($id);
             return redirect()->route('allArticle');
@@ -63,6 +73,12 @@ class ArticleController extends Controller
 
     public function update($id){
         try{
+
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
+
             $artCompl = new ArticleComplet();
             $res['articles'] = $artCompl->selectById($id);
             $res['article'] = $artCompl->select();
@@ -80,6 +96,12 @@ class ArticleController extends Controller
 
     public function modifier(Request $request){
         try{
+
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
+
             $id = $request->input('idarticle');
             $code = $request->input('code');
             $designation = $request->input('designation');
@@ -98,14 +120,11 @@ class ArticleController extends Controller
             $artCompl = new ArticleComplet();
 
             $stkArt->updateStockArticle($id,$pu);
-            $res['article'] = $artCompl->select();
+            $res['article'] = $artCompl->select($data);
             return redirect()->route('allArticle');
         }
         catch(Exception $ex){
             $res['erreur'] = $ex->getMessage();
-
-            $art = new ArticleComplet();
-            $res['article'] = $art->select();
             
             return view('accueil/accueil',$res);
         }

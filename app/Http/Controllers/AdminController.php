@@ -26,17 +26,21 @@ class AdminController extends Controller
             );
             $adm = new Admin();
             $res['admin'] = $adm->checkLogin($data);
-            //dd($res['admin']);
-            return redirect()->route('allArticle');
+
+            $request->session()->put('admin',$data);
+
+            return redirect()->route('allArticle');          
         }
         catch(Exception $ex){
             $res['erreur'] = $ex->getMessage();
-
-            $art = new ArticleComplet();
-            $res['article'] = $art->select();
             
             return view('login/loginView',$res);
-        }
-        //return view('accueil/utilisateurView', $res);
+        }   
+    }
+
+    public function deconnexion(Request $request){
+
+        $request->session()->forget('admin');
+        return redirect('login');
     }
 }

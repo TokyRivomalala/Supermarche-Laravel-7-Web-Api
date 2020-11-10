@@ -12,7 +12,17 @@
 <body>
     <div class="container">
         <div class = "list mt-4">
-            <h3>Nos Articles</h3>
+            <div class="row">
+                <div class="col-2">
+                    <h3>Nos Articles</h3>
+                </div>
+                <div class="ml-4">
+                    <form action = "{{  url('/')  }}/deconnexion" method = "POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger mb-4">Deconnexion</button>
+                    </form>
+                </div>
+            </div>
             <form class = "mt-4" action = "{{  url('/')  }}/article" method = "GET">
                 @csrf
                 <h5>Votre recherche ici</h5>

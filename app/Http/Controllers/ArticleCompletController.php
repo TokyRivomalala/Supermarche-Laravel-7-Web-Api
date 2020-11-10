@@ -12,6 +12,11 @@ class ArticleCompletController extends Controller
     //
     public function select(Request $request){
         try{
+            
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
 
             $code = $request->input('code');
             $designation = $request->input('designation');
