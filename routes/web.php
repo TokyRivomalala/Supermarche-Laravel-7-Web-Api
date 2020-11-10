@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 Route::get('/login', 'AdminController@index')->name('login');
 Route::post('/checkLogin', 'AdminController@checkLogin')->name('check login');
+//Route::get('/article/{orderBy}-{order}', 'ArticleCompletController@select')->name('allArticle');
 Route::get('/article', 'ArticleCompletController@select')->name('allArticle');
 Route::post('/newArticle', 'ArticleController@insert')->name('newArticle');
 Route::get('/article/delete/{id}', 'ArticleController@delete')->name('deleteArticle');

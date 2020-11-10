@@ -6,15 +6,45 @@ use Illuminate\Database\Eloquent\Model;
 
 use Exception;
 
+use App\Fonction;
+
 class ArticleComplet extends Model
 {
     //
     protected $table = 'articlecomplet';
     protected $fillable = ['idpourcentage','pourcentage','idarticle','idgratuit','nbmin','nbgratuit','idgratuitpourcentage','nbminprc','prc','designation','code','quantitestock','prixunitaire'];
 
-    public function select(){
+    public function select($data){
         try{
-            $res = ArticleComplet::paginate(3);
+
+            $code = $data['code'];
+            $designation = $data['designation'];
+            $pu = $data['pu'];
+            $stock = $data['stock'];
+            $orderBy = $data['orderBy'];
+            $order = $data['order'];
+
+            $artCompl = new ArticleComplet();
+
+            $code = $artCompl->rqtCode($code);
+            $designation = $artCompl->rqtDesignation($designation);
+            
+            $fonction = new Fonction();
+
+            if($fonction->IsNullOrEmptyString($orderBy) || $fonction->IsNullOrEmptyString($order)){
+                $res = ArticleComplet::where('code', 'LIKE' , $code)
+                                     ->where('designation', 'LIKE' , $designation)
+                                     ->paginate(3);
+            }
+            else{
+                $res = ArticleComplet::where('code', 'LIKE' , $code)
+                                     ->where('designation', 'LIKE' , $designation)
+                                     ->orderBy($orderBy, $order)
+                                     ->paginate(3);
+            }
+
+                                 
+
             if(count($res) == 0){
                 throw new Exception ('Aucun Article trouvee');
             }
@@ -23,6 +53,28 @@ class ArticleComplet extends Model
         catch(Exception $ex){
             throw $ex;
         }
+    }
+    //
+
+
+    public function rqtCode($code){
+        $fonction = new Fonction();
+        if($fonction->IsNullOrEmptyString($code)){
+            $code = '%%';
+            return $code;
+        }
+        $code = '%'.$code.'%';
+        return $code;
+    }
+
+    public function rqtDesignation($designation){
+        $fonction = new Fonction();
+        if($fonction->IsNullOrEmptyString($designation)){
+            $designation = '%%';
+            return $designation;
+        }
+        $designation = '%'.$designation.'%';
+        return $designation;
     }
 
     public function selectById($id){

@@ -5,17 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
     <title>Accueil Supermarche</title>
 </head>
 <body>
     <div class="container">
         <div class = "list mt-4">
             <h3>Nos Articles</h3>
+            <form class = "mt-4" action = "{{  url('/')  }}/article" method = "GET">
+                @csrf
+                <h5>Votre recherche ici</h5>
+                @if (isset($erreur))
+                    <span class="text text-danger">{{ $erreur }}</span>   
+                @endif
+                <div class="row ml-1 ">
+                    <div class="form-group">
+                        <label  class = "mt-2" for="exampleInputEmail1">Code</label>
+                        <input type="text" class="form-control col-md-8" id="exampleInputEmail1" name = "code">
+                    </div>
+                    <div class="form-group">
+                        <label  class = "mt-2" for="exampleInputEmail1">Designation</label>
+                        <input type="text" class="form-control col-md-8" id="exampleInputEmail1" name = "designation">
+                    </div>
+                </div>
+                <div class="row ml-1 ">
+                    <div class="form-group">
+                        <label  class = "mt-2" for="exampleInputEmail1">Trier Par</label><br>
+                        <select class="custom-select col-md-12" name = "orderBy">
+                            <option value = "prixunitaire"selected>Prix Unitaire</option>
+                            <option value="designation">Designation</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-left: 75px" >
+                        <label  class = "mt-2" for="exampleInputEmail1">Ordre</label><br>
+                        <select class="custom-select col-md-12" name = "order">
+                            <option value = "ASC"selected>Croissant</option>
+                            <option value="DESC">Decroissant</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row ml-1 ">
+                    <button type="submit" class="btn btn-primary mb-4">Rechercher</button>
+                </div>
+            </form>
             <div class="table">
                 <table class="table table-striped mt-3">
                     <tr>
+                        {{--  <th>Code
+                            <a href="{{  url('/')  }}/article/code-asc"><i class="fas fa-arrow-up mr-1"></i></a>
+                            <a href="{{  url('/')  }}/article/code-desc"><i class="fas fa-arrow-down"></i></a>
+                        </th>
+                        <th>Designation
+                            <a href="{{  url('/')  }}/article/designation-asc"><i class="fas fa-arrow-up mr-1"></i></a>
+                            <a href="{{  url('/')  }}/article/designation-desc"><i class="fas fa-arrow-down"></i></a>
+                        </th>  --}}
                         <th>Code</th>
-                        <th>Designation</th>
+                        <th>Designation </th>
                         <th>Quantite Stock</th>
                         <th>Prix Unitaire</th>
                         <th>Supprimer</th>
@@ -33,7 +79,12 @@
                     @endforeach
                 </table>
                 <div class="pagination">
-                    {{ $article->links() }}  
+                    
+                    @if (isset($query))
+                        {{ $article->appends($query)->links() }}          
+                    @else
+                        {{ $article->links() }}  
+                    @endif
                 </div>
             </div>
         </div>
