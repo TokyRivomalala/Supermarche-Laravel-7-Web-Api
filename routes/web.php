@@ -17,11 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/login', 'AdminController@index')->name('login');
-// Route::post('/deconnexion', 'AdminController@deconnexion')->name('deconnexion');
-// Route::post('/checkLogin', 'AdminController@checkLogin')->name('check login');
-// Route::get('/article', 'ArticleCompletController@select')->name('allArticle');
-// Route::post('/newArticle', 'ArticleController@insert')->name('newArticle');
-// Route::get('/article/delete/{id}', 'ArticleController@delete')->name('deleteArticle');
-// Route::get('/article/update/{id}', 'ArticleController@update')->name('updateArticle');
-// Route::post("/modifierArticle", 'ArticleController@modifier')->name('modifierArticle');
+Route::get('/login', 'AdminController@index')->name('login');
+Route::post('/deconnexion', 'AdminController@deconnexion')->name('deconnexion');
+Route::post('/checkLogin', 'AdminController@checkLogin')->name('check login');
+Route::get('/article', 'ArticleCompletController@select')->name('allArticle');
+Route::post('/newArticle', 'ArticleController@insert')->name('newArticle');
+Route::get('/article/delete/{id}', 'ArticleController@delete')->name('deleteArticle');
+Route::get('/article/update/{id}', 'ArticleController@update')->name('updateArticle');
+Route::post("/modifierArticle", 'ArticleController@modifier')->name('modifierArticle');

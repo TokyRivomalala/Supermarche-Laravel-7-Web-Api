@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-    
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,9 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/deconnexion', 'AdminController@deconnexionApi')->name('deconnexion');
-Route::post('/checkLogin', 'AdminController@checkLoginApi')->name('check login');
-Route::get('/article', 'ArticleCompletController@selectApi')->name('allArticle');
-Route::post('/newArticle', 'ArticleController@insertApi')->name('newArticle');
-Route::delete('/article/delete/{id}', 'ArticleController@deleteApi')->name('deleteArticle');
-Route::post("/modifierArticle", 'ArticleController@modifierApi')->name('modifierArticle');
+// Route::post('/deconnexion', 'AdminController@deconnexionApi')->name('deconnexion');
+// Route::post('/checkLogin', 'AdminController@checkLoginApi')->name('check login');
+// Route::get('/article', 'ArticleCompletController@selectApi')->name('allArticle');
+// Route::post('/newArticle', 'ArticleController@insertApi')->name('newArticle');
+// Route::delete('/article/delete/{id}', 'ArticleController@deleteApi')->name('deleteArticle');
+// Route::post("/modifierArticle", 'ArticleController@modifierApi')->name('modifierArticle');
