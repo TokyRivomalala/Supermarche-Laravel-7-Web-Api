@@ -129,4 +129,98 @@ class ArticleController extends Controller
             return view('accueil/accueil',$res);
         }
     }
+
+
+    //API
+
+    public function insertApi(Request $request){
+        try{
+
+            $code = $request->input('code');
+            $designation = $request->input('designation');
+            $pu = $request->input('pu');
+            $stock = $request->input('stock');
+
+            $data = array (
+                'code' => $code,
+                'designation' => $designation,
+                'pu' => $pu,
+                'stock' => $stock
+            );
+
+            $art = new Article();
+            $res['article'] = $art->insertComplet($data);
+
+            return response()->json([
+                'message' => 'Article Insere !' ,
+                'article' => $res,
+                'erreur' => ''
+            ], 200);
+        }
+        catch(Exception $ex){
+
+            return response()->json([
+                'message' => 'Erreur Insert Article',
+                'erreur' => $ex->getMessage()
+            ], 400);
+        }
+    }
+
+    public function deleteApi($id){
+        try{
+
+            $art = new Article();
+            $res['article'] = $art->deleteComplet($id);
+            
+            return response()->json([
+                'message' => 'Article Supprimé !' ,
+                'article' => $res,
+                'erreur' => ''
+            ], 200);
+        }
+        catch(Exception $ex){
+            return response()->json([
+                'message' => 'Erreur Delete Article',
+                'erreur' => $ex->getMessage()
+            ], 400);
+        }
+    }
+
+    public function modifierApi(Request $request){
+        try{
+
+            $id = $request->input('idarticle');
+            $code = $request->input('code');
+            $designation = $request->input('designation');
+            $pu = $request->input('pu');
+            $stock = $request->input('stock');
+
+            $data = array (
+                'code' => $code,
+                'designation' => $designation,
+                'pu' => $pu,
+                'stock' => $stock,
+                'idarticle' => $id
+            );
+
+            $stkArt = new StockArticle();
+            $artCompl = new ArticleComplet();
+
+            $stkArt->updateStockArticle($id,$pu);
+            $res['article'] = $data;
+            
+            return response()->json([
+                'message' => 'Article Modifié !' ,
+                'article' => $res,
+                'erreur' => ''
+            ], 200);
+        }
+        catch(Exception $ex){
+
+            return response()->json([
+                'message' => 'Erreur Update Article',
+                'erreur' => $ex->getMessage()
+            ], 400);
+        }
+    }
 }

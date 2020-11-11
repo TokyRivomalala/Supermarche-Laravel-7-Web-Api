@@ -18,4 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/checkLoginApi', 'AdminController@checkLoginApi')->name('check login api');
+
+Route::post('/deconnexion', 'AdminController@deconnexionApi')->name('deconnexion');
+Route::post('/checkLogin', 'AdminController@checkLoginApi')->name('check login');
+Route::get('/article', 'ArticleCompletController@selectApi')->name('allArticle');
+Route::post('/newArticle', 'ArticleController@insertApi')->name('newArticle');
+Route::delete('/article/delete/{id}', 'ArticleController@deleteApi')->name('deleteArticle');
+Route::post("/modifierArticle", 'ArticleController@modifierApi')->name('modifierArticle');

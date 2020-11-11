@@ -44,6 +44,18 @@ class AdminController extends Controller
         return redirect('login');
     }
 
+    public function deconnexionApi(Request $request){
+
+        $request->session()->forget('admin');
+
+        return response()->json([
+            'message' => 'Deconnexion ok !' ,
+            'erreur' => ''
+        ], 200);
+
+        return redirect('login');
+    }
+
     public function checkLoginApi(Request $request){
         try{
             $email = $request->input('email');
