@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Exception;
+
+use App\Admin;
 use App\ArticleComplet;
+
+use Concerns\InteractsWithInput;
 
 class ArticleCompletController extends Controller
 {
@@ -39,7 +43,7 @@ class ArticleCompletController extends Controller
             $art = new ArticleComplet();
             $res['article'] = $art->select($data);
             $res['query'] = $query;
-            //dd($res['article']);
+            
             return view('accueil/accueil',$res);
         }
         catch(Exception $ex){
@@ -48,6 +52,7 @@ class ArticleCompletController extends Controller
         //return view('accueil/utilisateurView', $res);
     }
 
+    //API
     public function selectApi(Request $request){
         try{
 
@@ -69,8 +74,13 @@ class ArticleCompletController extends Controller
                 'order' => $order,
             );
 
+            $admin = new Admin();
+            $token = $request->bearerToken();
+
+            $admin->checkTokenValidApi($token);
+
             $art = new ArticleComplet();
-            $res['article'] = $art->select($data);
+            $res['article'] = $art->selectApi($data);
             $res['query'] = $query;
 
             return response()->json([

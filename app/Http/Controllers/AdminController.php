@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Admin;
+
 use Exception;
 
+use App\Admin;
 use App\ArticleComplet;
 
 class AdminController extends Controller
@@ -44,6 +45,9 @@ class AdminController extends Controller
         return redirect('login');
     }
 
+
+    //API
+
     public function deconnexionApi(Request $request){
 
         $request->session()->forget('admin');
@@ -65,7 +69,7 @@ class AdminController extends Controller
                 'mdp' => $mdp
             );
             $adm = new Admin();
-            $res['admin'] = $adm->checkLogin($data);
+            $res['admin'] = $adm->checkLoginApi($data);
 
             return response()->json([
                 'message' => 'Login ok !' ,

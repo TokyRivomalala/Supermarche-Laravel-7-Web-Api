@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Exception;
 
+use App\Admin;
 use App\Article;
 use App\Remise;
 use App\StockArticle;
@@ -49,7 +50,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function delete($id){
+    public function delete(Request $request, $id){
         try{
 
             if(!$request->session()->has('admin')){
@@ -71,7 +72,26 @@ class ArticleController extends Controller
         }
     }
 
-    public function update($id){
+    public function update(Request $request, $id){
+
+        $code = $request->input('code');
+        $designation = $request->input('designation');
+        $pu = $request->input('pu');
+        $stock = $request->input('stock');
+        $orderBy = $request->input('orderBy');
+        $order = $request->input('order');
+
+        $query = $request->all();
+
+        $data = array (
+            'code' => $code,
+            'designation' => $designation,
+            'pu' => $pu,
+            'stock' => $stock,
+            'orderBy' => $orderBy,
+            'order' => $order,
+        );
+
         try{
 
             if(!$request->session()->has('admin')){
@@ -79,16 +99,17 @@ class ArticleController extends Controller
                 return view('login/loginView',$data);
             }
 
+
             $artCompl = new ArticleComplet();
             $res['articles'] = $artCompl->selectById($id);
-            $res['article'] = $artCompl->select();
+            $res['article'] = $artCompl->select($data);
             return view('accueil/accueil',$res);
         }
         catch(Exception $ex){
             $res['erreur'] = $ex->getMessage();
 
             $art = new ArticleComplet();
-            $res['article'] = $art->select();
+            $res['article'] = $art->select($data);
             
             return view('accueil/accueil',$res);
         }
@@ -96,11 +117,6 @@ class ArticleController extends Controller
 
     public function modifier(Request $request){
         try{
-
-            if(!$request->session()->has('admin')){
-                $data['erreur'] = "Veuiller d'abord vous connecter";
-                return view('login/loginView',$data);
-            }
 
             $id = $request->input('idarticle');
             $code = $request->input('code');
@@ -116,16 +132,24 @@ class ArticleController extends Controller
                 'idarticle' => $id
             );
 
+            if(!$request->session()->has('admin')){
+                $data['erreur'] = "Veuiller d'abord vous connecter";
+                return view('login/loginView',$data);
+            }
+
+
             $stkArt = new StockArticle();
             $artCompl = new ArticleComplet();
 
             $stkArt->updateStockArticle($id,$pu);
-            $res['article'] = $artCompl->select($data);
+
             return redirect()->route('allArticle');
         }
         catch(Exception $ex){
-            $res['erreur'] = $ex->getMessage();
             
+            $res['erreur'] = $ex->getMessage();
+            $res['article'] = $data;
+
             return view('accueil/accueil',$res);
         }
     }
@@ -148,8 +172,13 @@ class ArticleController extends Controller
                 'stock' => $stock
             );
 
+            $admin = new Admin();
+            $token = $request->bearerToken();
+
+            $admin->checkTokenValidApi($token);
+
             $art = new Article();
-            $res['article'] = $art->insertComplet($data);
+            $res['article'] = $art->insertCompletApi($data);
 
             return response()->json([
                 'message' => 'Article Insere !' ,
@@ -166,11 +195,16 @@ class ArticleController extends Controller
         }
     }
 
-    public function deleteApi($id){
+    public function deleteApi(Request $request, $id){
         try{
 
+            $admin = new Admin();
+            $token = $request->bearerToken();
+
+            $admin->checkTokenValidApi($token);
+
             $art = new Article();
-            $res['article'] = $art->deleteComplet($id);
+            $res['article'] = $art->deleteCompletApi($id);
             
             return response()->json([
                 'message' => 'Article Supprimé !' ,
@@ -203,10 +237,15 @@ class ArticleController extends Controller
                 'idarticle' => $id
             );
 
+            $admin = new Admin();
+            $token = $request->bearerToken();
+
+            $admin->checkTokenValidApi($token);
+
             $stkArt = new StockArticle();
             $artCompl = new ArticleComplet();
 
-            $stkArt->updateStockArticle($id,$pu);
+            $stkArt->updateStockArticleApi($id,$pu);
             $res['article'] = $data;
             
             return response()->json([

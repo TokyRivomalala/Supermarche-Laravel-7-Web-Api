@@ -39,4 +39,32 @@ class Remise extends Model
             throw $ex;
         }
     }
+
+    //API
+
+    public function insertApi($data){
+        try{
+            $rem = new Remise();
+
+            $rem->idarticle = $data['idarticle'];
+            $rem->idgratuit = $data['idgratuit'];
+            $rem->idpourcentage = $data['idpourcentage'];
+            $rem->idgratuitpourcentage = $data['idgratuitpourcentage'];
+            
+            $rem->save();
+        }
+        catch(Exception $ex){
+            throw $ex;
+        }
+    }
+
+    public function deleteRemiseApi($id){
+        try{
+            Remise::where('idarticle','=' , $id)->delete();
+        }
+        catch(Exception $ex){
+            throw $ex;
+        }
+    }
+
 }
