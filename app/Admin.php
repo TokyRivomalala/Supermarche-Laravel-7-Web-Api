@@ -72,6 +72,22 @@ class Admin extends Model
         }
     }
 
+    public function deleteTokenAdminApi($token){
+        try{
+
+            $data = array(
+                'token' => null,
+                'tokenexpiration' => null   
+            );
+
+            Admin::where('token', $token)
+                          ->update($data);
+        }
+        catch(Exception $ex){
+            throw $ex;
+        }
+    }
+
     public function checkTokenValidApi($token){
         
         try{

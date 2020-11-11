@@ -50,7 +50,11 @@ class AdminController extends Controller
 
     public function deconnexionApi(Request $request){
 
-        $request->session()->forget('admin');
+        $adm = new Admin();
+
+        $token = $request->bearerToken();
+        
+        $adm->deleteTokenAdminApi($token);
 
         return response()->json([
             'message' => 'Deconnexion ok !' ,
